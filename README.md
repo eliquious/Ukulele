@@ -45,7 +45,7 @@ CREATE SPATIAL INDEX index_name ON name USING name.id, name.num;
 Description
 -----------
 
-Streams and Collections can be created using the `CREATE` statement. Future versions may include the optional `FROM` and `WHERE` clauses. If it already exists, nothing happens. Functions will be overridden by default.
+Streams and Collections can be created using the `CREATE` statement. If it already exists, nothing happens. Functions will be overridden by default.
 Global or session variables can be created this way as well. Global variables are signified by a `@` prefix;
 All options specified must be contained within a single JSON object.
 
