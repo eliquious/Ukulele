@@ -1,4 +1,3 @@
-
 Components
 ==========
 
@@ -25,13 +24,17 @@ CREATE
 Examples
 --------
 
-CREATE DATABASE abc;
-CREATE COLLECTION abc;
-CREATE STREAM def;
-CREATE [UNIQUE|FULLTEXT|SPATIAL] INDEX index_name ON name USING name.id, name.num;
+. highlight::
 
-Needed?
-CREATE STREAM def FROM abc WHERE abc.name == "Max";
+  CREATE DATABASE abc;
+  CREATE COLLECTION abc;
+  CREATE STREAM def;
+  CREATE [UNIQUE|FULLTEXT|SPATIAL] INDEX index_name ON name USING name.id, name.num;
+
+. comment::
+  
+  Needed?
+  CREATE STREAM def FROM abc WHERE abc.name == "Max";
 
 Description
 -----------
@@ -43,19 +46,30 @@ Global or session variables can be created this way as well. Global variables ar
 Specification
 -------------
 
-CREATE [TYPE] [NAME];
-CREATE [TYPE] [NAME] WITH OPTIONS [...];
-CREATE [TYPE] [NAME] FROM [NAME] WHERE [CONDITIONS];
-CREATE [TYPE] [NAME] FROM [NAME] WHERE [CONDITIONS] WITH OPTIONS [...];
+. highlight::
 
-# index [Indexes only work on collections]
-CREATE [UNIQUE|FULLTEXT|SPATIAL] INDEX [INDEX_NAME] ON [NAME] USING [EXPR[...]];
+  CREATE [TYPE] [NAME];
+  CREATE [TYPE] [NAME] WITH OPTIONS [...];
+  CREATE [TYPE] [NAME] FROM [NAME] WHERE [CONDITIONS];
+  CREATE [TYPE] [NAME] FROM [NAME] WHERE [CONDITIONS] WITH OPTIONS [...];
 
-# Functions
-CREATE FUNCTION [NAME] [IF NOT EXISTS] WITH "[CODE]";
+Indexes only work on collections
 
-# Global Variables
-CREATE [GLOBAL|SESSION] VARIABLE [NAME] WITH [OPTIONS];
+. highlight::
+
+  CREATE [UNIQUE|FULLTEXT|SPATIAL] INDEX [INDEX_NAME] ON [NAME] USING [EXPR[...]];
+
+Functions
+
+. highlight::
+
+  CREATE FUNCTION [NAME] [IF NOT EXISTS] WITH "[CODE]";
+
+Global/Session Variables
+
+. highlight::
+
+  CREATE [GLOBAL|SESSION] VARIABLE [NAME] WITH [OPTIONS];
 
 INSERT INTO
 ===========
