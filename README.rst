@@ -24,17 +24,13 @@ CREATE
 Examples
 --------
 
-. highlight::
+ ::
 
   CREATE DATABASE abc;
   CREATE COLLECTION abc;
   CREATE STREAM def;
   CREATE [UNIQUE|FULLTEXT|SPATIAL] INDEX index_name ON name USING name.id, name.num;
 
-. comment::
-  
-  Needed?
-  CREATE STREAM def FROM abc WHERE abc.name == "Max";
 
 Description
 -----------
@@ -46,28 +42,28 @@ Global or session variables can be created this way as well. Global variables ar
 Specification
 -------------
 
-. highlight::
+ ::
 
   CREATE [TYPE] [NAME];
   CREATE [TYPE] [NAME] WITH OPTIONS [...];
   CREATE [TYPE] [NAME] FROM [NAME] WHERE [CONDITIONS];
   CREATE [TYPE] [NAME] FROM [NAME] WHERE [CONDITIONS] WITH OPTIONS [...];
 
-Indexes only work on collections
+*Indexes only work on collections*
 
-. highlight::
+ ::
 
   CREATE [UNIQUE|FULLTEXT|SPATIAL] INDEX [INDEX_NAME] ON [NAME] USING [EXPR[...]];
 
-Functions
+*Functions*
 
-. highlight::
+ ::
 
   CREATE FUNCTION [NAME] [IF NOT EXISTS] WITH "[CODE]";
 
-Global/Session Variables
+*Global/Session Variables*
 
-. highlight::
+ ::
 
   CREATE [GLOBAL|SESSION] VARIABLE [NAME] WITH [OPTIONS];
 
@@ -77,28 +73,32 @@ INSERT INTO
 Examples
 --------
 
-INSERT 1234 INTO abc;
-INSERT 3.141592653 INTO abc;
-INSERT "This is a string" INTO abc;
-INSERT ["this","is","an","array"] INTO abc;
-INSERT { type: "message", content: "This is an object" } INTO abc;
+ ::
 
-INSERT {
-  type:"nested",
-  content: {
-    content: "nested object",
-    x:1,
-    y: {str:"hi", str2:"there"},
-    z:true
-  }
-} INTO abc;
+  INSERT 1234 INTO abc;
+  INSERT 3.141592653 INTO abc;
+  INSERT "This is a string" INTO abc;
+  INSERT ["this","is","an","array"] INTO abc;
+  INSERT { type: "message", content: "This is an object" } INTO abc;
 
-INSERT { ... } INTO COLLECTION abc;
-INSERT { ... } INTO STREAM abc;
-INSERT { type: "message_type" } INTO COLLECTION $abc.type;
-INSERT { ..., global: @msg_count++ } INTO COLLECTION abc;
-INSERT { ... } AS msg INTO COLLECTION decide(msg) FROM abc;
-INSERT EACH [{...}, {...}, {...}, {...}] INTO COLLECTION abc;
+  INSERT {
+    type:"nested",
+    content: {
+      content: "nested object",
+      x:1,
+      y: {str:"hi", str2:"there"},
+      z:true
+    }
+  } INTO abc;
+
+ ::
+
+  INSERT { ... } INTO COLLECTION abc;
+  INSERT { ... } INTO STREAM abc;
+  INSERT { type: "message_type" } INTO COLLECTION $abc.type;
+  INSERT { ..., global: @msg_count++ } INTO COLLECTION abc;
+  INSERT { ... } AS msg INTO COLLECTION decide(msg) FROM abc;
+  INSERT EACH [{...}, {...}, {...}, {...}] INTO COLLECTION abc;
 
 Description
 -----------
@@ -113,9 +113,11 @@ Destinations can also be decided by a function call.
 Specification
 -------------
 
-INSERT [EACH] [DOCUMENT[...]] INTO [TYPE] [NAME];
-INSERT [EACH] [DOCUMENT[...]] INTO [TYPE] $[DOCUMENT.VARIABLE];
-INSERT [EACH] [DOCUMENT[...]] AS [ALIAS] INTO [TYPE] [FUNC([ALIAS])];
+. ::
+
+  INSERT [EACH] [DOCUMENT[...]] INTO [TYPE] [NAME];
+  INSERT [EACH] [DOCUMENT[...]] INTO [TYPE] $[DOCUMENT.VARIABLE];
+  INSERT [EACH] [DOCUMENT[...]] AS [ALIAS] INTO [TYPE] [FUNC([ALIAS])];
 
 FORWARD
 =======
@@ -123,10 +125,12 @@ FORWARD
 Examples
 --------
 
-FORWARD extend(abc, {time: now()}) INTO STREAM def FROM abc WHERE abc.type.contains("message");
-FORWARD {time: now(), type: abc.type, content: abc.content} INTO STREAM def FROM abc WHERE abc.type.contains("message");
-FORWARD reduce(data) INTO COLLECTION abc FROM def WHERE abc.var > 5 HOLD seconds(def, 5) AS data;
-FORWARD reduce(data) INTO STREAM abc FROM def WHERE abc.var > 5 HOLD rows(def, 5) AS data;
+ ::
+
+  FORWARD extend(abc, {time: now()}) INTO STREAM def FROM abc WHERE abc.type.contains("message");
+  FORWARD {time: now(), type: abc.type, content: abc.content} INTO STREAM def FROM abc WHERE abc.type.contains("message");
+  FORWARD reduce(data) INTO COLLECTION abc FROM def WHERE abc.var > 5 HOLD seconds(def, 5) AS data;
+  FORWARD reduce(data) INTO STREAM abc FROM def WHERE abc.var > 5 HOLD rows(def, 5) AS data;
 
 Description
 -----------
@@ -140,12 +144,13 @@ All forwarded streams will have a cluster-wide UUID which will allows for real-t
 Specification
 -------------
 
-# Stream support
-FORWARD [DOCUMENT] INTO [TYPE] [NAME] FROM [NAME] WHERE [CONDITION[...]];
-FORWARD [NON NULL] [FUNC([DOCUMENT])] INTO [TYPE] [NAME] FROM [NAME] WHERE [CONDITION[...]];
-FORWARD [NON NULL] [FUNC([ALIAS])] INTO [TYPE] [NAME] FROM [NAME] WHERE [CONDITION[...]] HOLD [PREDICATE] AS [ALIAS];
-FORWARD [EACH] [NON NULL] [FUNC([ALIAS])] INTO [TYPE] [NAME] FROM [NAME] WHERE [CONDITION[...]] HOLD [PREDICATE] AS [ALIAS];
-FORWARD [EACH] INTO [TYPE] [NAME] FROM [SELECT];
+ ::
+
+  FORWARD [DOCUMENT] INTO [TYPE] [NAME] FROM [NAME] WHERE [CONDITION[...]];
+  FORWARD [NON NULL] [FUNC([DOCUMENT])] INTO [TYPE] [NAME] FROM [NAME] WHERE [CONDITION[...]];
+  FORWARD [NON NULL] [FUNC([ALIAS])] INTO [TYPE] [NAME] FROM [NAME] WHERE [CONDITION[...]] HOLD [PREDICATE] AS [ALIAS];
+  FORWARD [EACH] [NON NULL] [FUNC([ALIAS])] INTO [TYPE] [NAME] FROM [NAME] WHERE [CONDITION[...]] HOLD [PREDICATE] AS [ALIAS];
+  FORWARD [EACH] INTO [TYPE] [NAME] FROM [SELECT];
 
 SELECT
 ======
@@ -153,10 +158,12 @@ SELECT
 Examples
 --------
 
-SELECT FROM abc;
-SELECT { x:abc.type, y:abc.content.x, z:abc.content.x+50 } FROM abc;
-SELECT FROM abc WHERE abc.type=="message";
-SELECT avg(ppl, "age") FROM ppl WHERE ppl.salary > 50000;
+ ::
+
+  SELECT FROM abc;
+  SELECT { x:abc.type, y:abc.content.x, z:abc.content.x+50 } FROM abc;
+  SELECT FROM abc WHERE abc.type=="message";
+  SELECT avg(ppl, "age") FROM ppl WHERE ppl.salary > 50000;
 
 Description
 -----------
@@ -168,15 +175,17 @@ Joins may be added later.
 Specification
 -------------
 
-SELECT [FUNC([DOCUMENT])];
-SELECT [DISTINCT] [DOCUMENT|FUNC([DOCUMENT])] FROM [NAME[...]] [WHERE [CONDITION[...]]]
-    GROUP BY [[NAME[ASC|DESC]]|[EXPR[ASC|DESC]]] [HAVING [[EXPR]|[FUNC]]]
-    MAP BY [[NAME[ASC|DESC]]|[EXPR[ASC|DESC]]] [HAVING [[EXPR]|[FUNC]]]
-    ORDER BY [[NAME[ASC|DESC]]|[EXPR[ASC|DESC]]|[FUNC]]
-    [LIMIT [NUM] [OFFSET[NUM]]]
-    [UNION|INTERSECT|EXCEPT]
-    [HOLD [PRDICATE] AS [ALIAS]]
-    WITH OPTIONS [...];
+ ::
+
+  SELECT [FUNC([DOCUMENT])];
+  SELECT [DISTINCT] [DOCUMENT|FUNC([DOCUMENT])] FROM [NAME[...]] [WHERE [CONDITION[...]]]
+      GROUP BY [[NAME[ASC|DESC]]|[EXPR[ASC|DESC]]] [HAVING [[EXPR]|[FUNC]]]
+      MAP BY [[NAME[ASC|DESC]]|[EXPR[ASC|DESC]]] [HAVING [[EXPR]|[FUNC]]]
+      ORDER BY [[NAME[ASC|DESC]]|[EXPR[ASC|DESC]]|[FUNC]]
+      [LIMIT [NUM] [OFFSET[NUM]]]
+      [UNION|INTERSECT|EXCEPT]
+      [HOLD [PRDICATE] AS [ALIAS]]
+      WITH OPTIONS [...];
 
 DROP
 ====
@@ -184,11 +193,13 @@ DROP
 Examples
 --------
 
-DROP DATABASE abc;
-DROP COLLECTION abc;
-DROP STREAM abc;
-DROP INDEX abc;
-DROP FUNCTION abc;
+  ::
+
+  DROP DATABASE abc;
+  DROP COLLECTION abc;
+  DROP STREAM abc;
+  DROP INDEX abc;
+  DROP FUNCTION abc;
 
 Description
 -----------
@@ -198,15 +209,18 @@ Drops a particular database, collection, stream, index or function. If it doesn'
 Specification
 -------------
 
-DROP [TYPE] [NAME];
+  ::
+
+  DROP [TYPE] [NAME];
 
 DELETE
 ======
 
 Examples
 --------
+  ::
 
-DELETE FROM abc WHERE abc.type == "message";
+  DELETE FROM abc WHERE abc.type == "message";
 
 Description
 -----------
@@ -216,7 +230,9 @@ Delete allows for the filtered removal of documents from a collection.
 Specification
 -------------
 
-DELETE FROM [NAME] WHERE [CONDITIONS] [WITH [OPTIONS]];
+.. code::
+
+  DELETE FROM [NAME] WHERE [CONDITIONS] [WITH [OPTIONS]];
 
 SET
 ===
@@ -224,10 +240,12 @@ SET
 Example
 -------
 
-SET date_format TO "YYYYMMDD";
-SET max_connections = 500;
-SET @msg_count++;
-SET value =+ 2;
+.. code::
+
+  SET date_format TO "YYYYMMDD";
+  SET max_connections = 500;
+  SET @msg_count++;
+  SET value =+ 2;
 
 Description
 -----------
@@ -237,5 +255,7 @@ Sets a particular global or session variable. Global variables are specified by 
 Specification
 -------------
 
-SET [NAME] [TO|=|+=|=-|=/|=*|=%] [VALUE|EXPR] [WITH [OPTIONS]];
-SET [EXPR] [WITH [OPTIONS]];
+.. code::
+
+  SET [NAME] [TO] [VALUE] [WITH [OPTIONS]];
+  SET [EXPR] [WITH [OPTIONS]];
