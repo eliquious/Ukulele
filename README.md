@@ -57,19 +57,19 @@ CREATE [TYPE] [NAME] FROM [NAME] WHERE [CONDITIONS];
 CREATE [TYPE] [NAME] FROM [NAME] WHERE [CONDITIONS] WITH OPTIONS [...];
 ```
 
-*Indexes* (collections only)
+**Indexes** (collections only)
 
 ```
 CREATE [UNIQUE|FULLTEXT|SPATIAL] INDEX [INDEX_NAME] ON [NAME] USING [EXPR[...]];
 ```
 
-*Functions*
+**Functions**
 
 ```
 CREATE FUNCTION [NAME] [IF NOT EXISTS] WITH "[CODE]";
 ```
 
-*Global Variables*
+**Global/Session Variables**
 
 ```
 CREATE [GLOBAL|SESSION] VARIABLE [NAME] WITH [OPTIONS];
