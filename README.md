@@ -46,17 +46,15 @@ Description
 -----------
 
 Streams and Collections can be created using the `CREATE` statement. Future versions may include the optional `FROM` and `WHERE` clauses. If it already exists, nothing happens. Functions will be overridden by default.
-
 Global or session variables can be created this way as well. Global variables are signified by a `@` prefix;
+All options specified must be contained within a single JSON object.
 
 Specification
 -------------
 
 ```
-CREATE [TYPE] [NAME];
-CREATE [TYPE] [NAME] WITH OPTIONS [...];
-CREATE [TYPE] [NAME] FROM [NAME] WHERE [CONDITIONS];
-CREATE [TYPE] [NAME] FROM [NAME] WHERE [CONDITIONS] WITH OPTIONS [...];
+CREATE [TYPE] [NAME] [WITH [OPTIONS]];
+CREATE [TYPE] [NAME] FROM [NAME] WHERE [CONDITIONS] [WITH [OPTIONS]];
 ```
 
 **Indexes** (collections only)
@@ -106,7 +104,7 @@ INSERT { ... } INTO COLLECTION abc;
 INSERT { ... } INTO STREAM abc;
 INSERT { type: "message_type" } INTO COLLECTION $abc.type;
 INSERT { ..., global: @msg_count++ } INTO COLLECTION abc;
-INSERT { ... } AS msg INTO COLLECTION decide(msg) FROM abc;
+INSERT { ... } AS msg INTO COLLECTION decide(msg);
 INSERT EACH [{...}, {...}, {...}, {...}] INTO COLLECTION abc;
 ```
 
@@ -151,17 +149,18 @@ Essentially, the `FORWARD` command creates a new Collection or Stream from an ex
 
 Forward is used to generate a filtered and/or modified stream of data. These new streams can be attached to existing collections/streams and are fed data as documents are inserted into the data source as specified by the FROM clause.
 
-All forwarded streams will have a cluster-wide UUID which will allows for real-time modification or deletion of each stream. A specific command will need to be added to allow for the atomic modification of streams while running.
+All forwarded streams will have a cluster-wide UUID which will allows for real-time modification or deletion of each forwarded stream. A specific command will need to be added to allow for the atomic modification of streams while running.
 
 Specification
 -------------
 
 ```
-FORWARD [DOCUMENT] INTO [TYPE] [NAME] FROM [NAME] WHERE [CONDITION[...]];
-FORWARD [NON NULL] [FUNC([DOCUMENT])] INTO [TYPE] [NAME] FROM [NAME] WHERE [CONDITION[...]];
-FORWARD [NON NULL] [FUNC([ALIAS])] INTO [TYPE] [NAME] FROM [NAME] WHERE [CONDITION[...]] HOLD [PREDICATE] AS [ALIAS];
-FORWARD [EACH] [NON NULL] [FUNC([ALIAS])] INTO [TYPE] [NAME] FROM [NAME] WHERE [CONDITION[...]] HOLD [PREDICATE] AS [ALIAS];
-FORWARD [EACH] INTO [TYPE] [NAME] FROM [SELECT];
+FORWARD [EACH] [NON NULL] [DOCUMENT|FUNC([DOCUMENT|ALIAS])]
+  INTO [TYPE] [NAME] 
+  FROM [NAME|SELECT] 
+  WHERE [CONDITION[,]]
+  [HOLD [PREDICATE] AS [ALIAS]]
+  [WITH [OPTIONS]];
 ```
 
 - - - 
