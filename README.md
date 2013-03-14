@@ -39,7 +39,7 @@ Examples
 CREATE DATABASE abc;
 CREATE COLLECTION abc;
 CREATE STREAM def;
-CREATE [UNIQUE|FULLTEXT|SPATIAL] INDEX index_name ON name USING name.id, name.num;
+CREATE SPATIAL INDEX index_name ON name USING name.id, name.num;
 ```
 
 Description
