@@ -25,6 +25,8 @@ Syntax
 
 For now the main syntactical elements include `CREATE`, `INSERT`, `FORWARD`, `SELECT`, `DELETE`, `SET` and `DROP`.
 
+Documents follow the JSON specification with a slight mod allowing global variables to be prefixed with an `@`. All functions (UDFs) will be defined in JavaScript.
+
 - - - 
 
 CREATE
