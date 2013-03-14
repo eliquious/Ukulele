@@ -279,3 +279,9 @@ Specification
 SET [NAME] [TO] [VALUE|EXPR] [WITH [OPTIONS]];
 SET [EXPR] [WITH [OPTIONS]];
 ```
+
+## License
+
+Copyright (C) 2013 Max Franks
+
+Distributed under the Eclipse Public License, v1.0.
